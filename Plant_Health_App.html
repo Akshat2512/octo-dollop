@@ -185,7 +185,7 @@
             headers :  header,
             body: JSON.stringify({
             message: 'Updated Users Record',
-            content: content
+            content: atob(content)
             })
         }). then(response => response.json())
             . then(data =>  
