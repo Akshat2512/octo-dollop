@@ -178,8 +178,8 @@
     
     function UpdateData(i_url, content)
     {
-        
-        fetch(`i_url`, {
+        console.log(i_url);
+        fetch(i_url, {
             cache: 'no-cache',
             method: 'PUT',
             headers :  header,
