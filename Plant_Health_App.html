@@ -178,15 +178,14 @@
     function UpdateData(i_url, content)
     {   
         var img;
-        fetch(content).then(response => response.json()).then(data => img = data.content)
-        console.log(i_url);
-        fetch(i_url, {
+        fetch(content).then(response => response.blob()).then(blob => {
+            fetch(i_url, {
             cache: 'no-cache',
             method: 'PUT',
             headers :  header,
             body: JSON.stringify({
             message: 'Updated Users Record',
-            content: img
+            content: blob
             })
         }). then(response => response.json())
             . then(data =>  
@@ -194,6 +193,8 @@
                     console.log(data);
             
                 })
+        }); 
+       
     }    
     
     function DeleteData()
