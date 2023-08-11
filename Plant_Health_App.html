@@ -1,0 +1,287 @@
+
+<!DOCTYPE html>
+<html>
+    
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<style>
+
+      body{
+      height: 1200px;
+      }
+      
+        table,
+        th,
+        tr,
+        td,video {
+            border: 3px solid;
+            text-align: center;
+            border-style: solid;
+            width: 500px;
+            padding-left: 30px;
+            padding-right: 50px;
+            
+        }
+        button{
+            padding: 30px;
+        }
+        span{
+            font-weight: bold;
+        }
+        table{
+            background-color: grey;
+            border-collapse: collapse;
+            
+        }
+        #container{
+
+            position: relative;
+        }
+        #bar{
+           
+             width: 100%;
+             text-align: left;
+             background-color: rgb(184, 179, 179);
+             opacity: 0%;
+        }
+        #span1{
+            background-color: rgb(64, 237, 64);
+            color:rgb(64, 237, 64);
+        }
+        #span2{
+            position:absolute;
+            top: 28%;
+            opacity:0%;
+          
+        }
+</style>
+</head>
+
+<body>
+    <form  method='post'>
+    <select id="cameraList"> </select><br><br>
+    <div id="video"> </div> 
+    <div> <span id='cap'><Button type='button' onclick='capture()'>Capture</button></span> <br></div><span id='st'><button  type='button' onclick="stopCamera()">Stop</button></span> <span id='mode'><button type='button' onclick="sync()" disabled>Synchronous</button></span>
+    <canvas id="c" hidden="hidden"> </canvas><br>
+   <pre><div id="container">
+       <marquee scrollamount="70" id="bar" direction="right" >
+       <span id='span1'>_________________</span></marquee> 
+        <span id="span2"></span></div></pre>
+    <div id="t"></div>
+    
+    </form>
+
+   
+    <script>
+        
+    
+        var Domain = "";
+        fetch("data.json"). then((response) => response.json()). then((data) => { Domain = data.Domain;console.log(Domain);}); 
+    
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) 
+        { document.getElementById("video").innerHTML="<video height='1000' width='700'> </video>";}       
+        else 
+        { document.getElementById("video").innerHTML="<video height='500' width='400'> </video>";}
+        
+        const video = document.querySelector('video');
+
+        const n = navigator.mediaDevices;
+        var camId=[];
+        ls=null;
+        let i=0;
+   
+    
+    n.enumerateDevices().then(devices => {
+    var videoDevices = devices.filter(function(device) {
+        return device.kind === 'videoinput';
+    });
+
+
+    videoDevices.forEach(function(device) {
+        camId.push(device.deviceId);
+        camId.push(device.label);
+
+    });
+  
+      for(let i = camId.length;i>0;i=i-2)
+        {   
+            var x=document.getElementById("cameraList").innerHTML;
+           document.getElementById("cameraList").innerHTML = x+"<option>"+camId[i-1]+"</option><br>";
+        }
+
+     startCamera();
+      
+    });
+   
+  
+    function startCamera()
+        {   
+    
+            var changecamera = document.getElementById("cameraList").value;
+            console.log(changecamera)
+
+            
+             let index= camId.indexOf(changecamera);
+
+             n.getUserMedia({video:{deviceId:{exact:camId[index-1]}}}).then(stream => {
+                         video.srcObject = stream;
+                         ls=stream;
+                         video.play();
+                        }).catch(error => { console.error('Error accessing media devices.', error); });
+            return changecamera
+        } 
+   
+       function scrolltoBottom(){
+              window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: 'smooth'
+            });
+                }
+
+
+    function capture()
+        {      
+                scrolltoBottom();
+                document.getElementById('cap').innerHTML="<Button type='button' onclick='capture()' disabled>Capture</button>"
+                var sp=document.getElementById("span2");
+                sp.innerHTML="sending data to the server....";
+                 sp.style.opacity='100%';
+                document.getElementById("bar").style.opacity='100%';
+                let width=video.videoWidth;
+                let height=video.videoHeight;
+                 console.log(width,height);
+                 $("#c").attr('width',width);
+                 $("#c").attr('height',height);
+                var canvas = document.getElementById("c");
+                canvas.getContext('2d').drawImage(video,0,0);
+                const dataURL = canvas.toDataURL("image/jpg");
+                var ch_int='';
+                var bar=0;
+                
+                var j_url = Domain+'/temp/info.json';
+                var s_url = Domain+'/php/Web_Application/script.php';
+               
+                 $.post(s_url, {url2:'temp/info.json'}, function(){} );//for deleting info.json file
+                 $.post(s_url, {url1: dataURL },myFunction);// saving image to the folder
+                 
+                 function myFunction(){
+                     
+                    sp.innerHTML="Receiving data from the server....";
+                   clearInterval(ch_int);
+                    console.log("info.json not found");
+                     $.ajax({
+                   headers: {"Access-Control-Allow-Origin":"https://akshat2512.github.io","ngrok-skip-browser-warning": "1","Content-Type":"application/json"},
+                   url: j_url,
+                   dataType: "json",
+                         
+                   success: function(data) {
+                // Create a table element.
+                   document.getElementById("bar").style.opacity='0%';
+                   
+                   // $.post(s_url, {'temp\\info.json'}, function(){} );
+                   var table = $("<table><tr><th><span>Image</span></th><th><span>Species</span></th><th><span>Disease</span></th><th><span>Confidence</span></th></tr>");
+                   var row=$("<tr>");
+                   $.each(data, function (index, value){ row.append("<td><span>"+value+"</span></td>"); });
+                   table.append(row);
+                   table.append("</tr></table>");
+                   $("#t").html(table);
+                   $("#img").attr('src',dataURL);
+                    $("#img").attr('width',width/1.5);
+                    $("#img").attr('height',height/1.5);
+                   sp.style.opacity="0%";
+                   document.getElementById('cap').innerHTML="<Button type='button' onclick='capture()'>Capture</button>";
+                   
+              
+                }, error: function(){
+                   
+                    ch_int=setInterval(myFunction, 200);
+                  
+                }
+                 
+                  });  
+              
+}
+            
+        }
+      
+       
+     
+        function stop() {
+
+        ls.getTracks().forEach(function(track) {
+        video.pause();
+        track.stop();
+        });
+        }
+
+        function stopCamera() {
+
+            stop();
+            document.getElementById('st').innerHTML="<button type='button' onclick='playCamera()'>Play</button>";
+
+        }
+
+        function playCamera() {
+          
+            startCamera();
+            document.getElementById('st').innerHTML="<button type='button' onclick='stopCamera()'>Stop</button>";
+        }
+
+
+
+        var int = '';
+        function sync()
+        {
+            function start()
+            {
+                capture();
+                console.log('Hello');
+            }
+
+          int=setInterval(start,500);
+           
+           document.getElementById('mode').innerHTML="<button type='button' onclick='async()'>Asynchronous</button>";
+           document.getElementById('cap').innerHTML="<Button type='button' onclick='capture()' disabled>Capture</button>";
+       
+        } 
+
+     function async()
+        {
+
+           clearInterval(int);
+            document.getElementById('mode').innerHTML="<button type='button' onclick='sync()'>Synchronous</button>"
+            document.getElementById('cap').innerHTML="<Button type='button' onclick='capture()'>Capture</button>";
+        } 
+       
+   
+         
+         var t=document.getElementById("cameraList").value;
+         console.log(t)
+         
+         
+          
+          const interval = setInterval(() => {
+           var changecamera = document.getElementById("cameraList").value;
+            
+             if(t!=changecamera)
+             { 
+            
+             stop();
+             startCamera();
+             t=changecamera;
+             }
+             
+            }, 1000); 
+        
+
+       
+
+            
+</script>
+
+
+
+
+</body>
+</html>
