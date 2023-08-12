@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
     
@@ -61,7 +60,7 @@
     <form  method='post'>
     <select id="cameraList"> </select><br><br>
     <div id="video"> </div> 
-    <div> <span id='cap'><Button type='button' onclick='capture()'>Capture</button></span> <br></div><span id='st'><button  type='button' onclick="stopCamera()">Stop</button></span> <span id='mode'><button type='button' onclick="sync()" disabled>Synchronous</button></span>
+    <div> <span id='cap'><Button type='button' onclick='capture()'>Capture</button></span> <br></div><span id='st'><button  type='button' onclick="stopCamera()">Stop</button></span> <button id="server" type="button" onclick="startserver()">Start Server</button> <span id='mode'><button type='button' onclick="sync()" disabled>Synchronous</button></span>
     <canvas id="c" hidden="hidden"> </canvas><br>
    <pre><div id="container">
        <marquee scrollamount="70" id="bar" direction="right" >
@@ -146,6 +145,61 @@
             });
                 }
     
+     
+     var s_url = `https://api.github.com/repos/${owner}/${repo}/contents/Plant_Disease_Detection/temp/status.txt`;
+     var l  = setInterval(() => {
+            fetch(s_url,{
+                method : 'get',
+                headers : header,
+                
+            }).then(response => response.json())
+            .then(data => { status = data.content;
+            status = atob(status);
+            if(status == 'start')
+             {  
+                button.style.backgroundColor = 'green';
+             }
+            else
+            {
+                button.style.backgroundColor = 'red';
+                button.disabled='false';
+            }
+            })
+            .catch((error) => console.error(error))
+        
+        },5000)
+
+    function startserver()
+    {  
+        var button= document.getElementById('server');
+         button.disabled='true';
+         button.style.backgroundColor = 'red';
+        
+        fetch(s_url, {
+            method: 'PUT',
+            headers: header,
+            body: JSON.stringify({
+                message: 'status update',
+                content: btoa('start') })
+         })
+        .then((response) => response.json())
+        .then((data) => 
+        {
+            console.log(data);
+           
+        }).catch((error) => console.error(error));
+    
+
+
+        fetch(`https://api.github.com/repos/${owner}/${repo}/actions/workflows/Pyscript.yml/dispatches`, {
+  method: 'POST',
+  headers: header,
+  body: JSON.stringify({
+    ref: 'master'
+  })
+})
+    }
+
     
     function UpdateData(i_url, content)
     {   
@@ -168,7 +222,8 @@
 
     } 
        
-      
+    
+ 
 
     function capture()
         {      
@@ -211,7 +266,7 @@
 
                   
                      $.ajax({
-                   cache: 'no-cache',
+                 
                    headers: header,
                    url: j_url,
                    dataType: "json",
@@ -270,6 +325,25 @@
        
      
         function stop() {
+      
+        var button= document.getElementById('server');
+         button.disabled='false';
+         button.style.backgroundColor = 'red';
+        var s_url = `https://api.github.com/repos/${owner}/${repo}/contents/Plant_Disease_Detection/temp/status.txt`;
+        fetch(s_url, {
+            method: 'PUT',
+            headers: header,
+            body: JSON.stringify({
+                message: 'status update',
+                content: btoa('stop') })
+         })
+        .then((response) => response.json())
+        .then((data) => 
+        {
+            console.log(data);
+            sp.innerHTML="Receiving data from the server....";
+        }).catch((error) => console.error(error));
+    
 
         ls.getTracks().forEach(function(track) {
         video.pause();
