@@ -320,7 +320,8 @@
             headers: header,
             body: JSON.stringify({
                 message: 'status update',
-                content: btoa('stop') })
+                content: btoa('stop'),
+                sha: statsha })
          })
         .then((response) => response.json())
         .then((data) => 
