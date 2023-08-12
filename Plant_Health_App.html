@@ -161,9 +161,12 @@
             statsha = data.sha;
             if(status == 'start')
              {  
+                 
+                  if(flag == 1)
+                 {
                 statbtn.disabled = true;
-                stat.style.backgroundColor = 'green';
-                 flag = 1;
+                  flag = 0;}
+                         stat.style.backgroundColor = 'green';
              }
             else
             {  
