@@ -149,6 +149,7 @@
      var stat= document.getElementById('status');
      var statbtn = document.getElementById('server');
      var s_url = `https://api.github.com/repos/${owner}/${repo}/contents/Plant_Disease_Detection/temp/status.txt`;
+     var flag = 1;   
      var l  = setInterval(() => {
             fetch(s_url,{
                 method : 'get',
@@ -162,9 +163,13 @@
              {  
                 statbtn.disabled = true;
                 stat.style.backgroundColor = 'green';
+                 flag = 1;
              }
             else
-            {
+            {  
+                 if(flag == 1)
+                 {  statbtn.disabled = false; 
+                   flag = 0;}
                 stat.style.backgroundColor = 'red';
                
             }
