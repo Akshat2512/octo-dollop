@@ -150,22 +150,22 @@
 
     function LoadData(i_url,content)
     {  
-        fetch(i_url, {
+        fetch(i_url+'image.txt', {
                     cache: 'no-cache',
                     method: 'get',
                     headers:  header 
                     }). then(response => response.json())
                     .then(data => {
-                        // content = data.content; 
+                        cont = data.content; 
                         sha2 = data.sha;
-                    fetch(i_url, {
+                    fetch(i_url+'ima.png', {
                     cache: 'no-cache',
                     method: 'PUT',
                     headers:  header ,
                     body: JSON.stringify({
-                        message: 'IMG Update',
-                        content: content,
-                        sha: sha2
+                        message: 'IMG Upload',
+                        content: atob(cont),
+                      
                     })
                     })
                     .then(response => response.json())
@@ -177,43 +177,59 @@
     
     function UpdateData(i_url, content)
     {   
-        var img;
-        fetch(content).then(response => response.blob()).then(blob => {
-            fetch(i_url, {
-            cache: 'no-cache',
+        
+        var sp=document.getElementById("span2");
+
+        fetch(i_url, {
             method: 'PUT',
-            headers :  header,
+            headers: header,
             body: JSON.stringify({
-            message: 'Updated Users Record',
-            content: blob
-            })
-        }). then(response => response.json())
-            . then(data =>  
-                {   
-                    console.log(data);
-            
-                })
-        }); 
+                message: 'image content upload',
+                content: (content)  })
+         })
+        .then((response) => response.json())
+        .then((data) => 
+        {
+            console.log(data);
+            sp.innerHTML="Receiving data from the server....";
+        }).catch((error) => console.error(error));
+
+    } 
        
-    }    
     
-    function DeleteData()
+    
+    function DeleteData(j_url)
     {
-        fetch(`https://api.github.com/repos/${owner}/${repo}/contents/file.json`, {
+
+        fetch(j_url,{
+            cache: 'no-cache',
+            method: 'GET',
+            headers :  header 
+            
+         }).then(response => response.json())
+          .then(data => {
+              sha = data.sha;
+              fetch(j_url, {
             cache: 'no-cache',
             method: 'DELETE',
             headers :  header ,
             body: JSON.stringify({
             message: 'Delete Record',
-            content: js,
             sha: sha
-            })
+          })
         }). then(response => response.json())
             . then(data =>  
                 { 
                     console.log(data);
             
                 })
+      
+          });
+       
+
+
+
+        
     }
           
 
@@ -232,7 +248,8 @@
                  $("#c").attr('height',height);
                 var canvas = document.getElementById("c");
                 canvas.getContext('2d').drawImage(video,0,0);
-                const dataURL = canvas.toDataURL("image/jpg");
+                var dataURL = canvas.toDataURL("image/png");
+                var dataURL = dataURL.replace('data:image/png;base64,','');
                 var ch_int='';
                 var bar=0;
                 
@@ -242,38 +259,65 @@
               //   $.post(s_url, {url2:'temp/info.json'}, function(){} );//for deleting info.json file
                //  $.post(s_url, {url1: dataURL },myFunction);// saving image to the folder
                var i_url = `https://api.github.com/repos/${owner}/${repo}/contents/Plant_Disease_Detection/input/IMG.jpg`;
+               var j_url = `https://api.github.com/repos/${owner}/${repo}/contents/Plant_Disease_Detection/temp/info.json`;
+
+               //DeleteData(j_url);
                UpdateData(i_url, dataURL);
-               
+               myFunction();
              
 
                  function myFunction(){
                      
-                    sp.innerHTML="Receiving data from the server....";
+                    
                    clearInterval(ch_int);
                     console.log("info.json not found");
+
+                  
                      $.ajax({
-                   headers: {"Access-Control-Allow-Origin":"https://akshat2512.github.io","ngrok-skip-browser-warning": "1","Content-Type":"application/json"},
+                   cache: 'no-cache',
+                   headers: header,
                    url: j_url,
                    dataType: "json",
                          
                    success: function(data) {
+                  
+                    sha = data.sha;
+                    content=atob(data.content);
+                    content=JSON.parse(content);
                 // Create a table element.
-                   document.getElementById("bar").style.opacity='0%';
+                    fetch(j_url, {
+                        cache: 'no-cache',
+                        method: 'DELETE',
+                        headers :  header ,
+                        body: JSON.stringify({
+                        message: 'Delete Record',
+                        sha: sha
+                    })
+                    }). then(response => response.json())
+                        . then(data =>  
+                            { 
+                                document.getElementById("bar").style.opacity='0%';
                    
                    // $.post(s_url, {'temp\\info.json'}, function(){} );
-                   var table = $("<table><tr><th><span>Image</span></th><th><span>Species</span></th><th><span>Disease</span></th><th><span>Confidence</span></th></tr>");
-                   var row=$("<tr>");
-                   $.each(data, function (index, value){ row.append("<td><span>"+value+"</span></td>"); });
-                   table.append(row);
-                   table.append("</tr></table>");
-                   $("#t").html(table);
-                   $("#img").attr('src',dataURL);
-                    $("#img").attr('width',width/1.5);
-                    $("#img").attr('height',height/1.5);
-                   sp.style.opacity="0%";
-                   document.getElementById('cap').innerHTML="<Button type='button' onclick='capture()'>Capture</button>";
-                   
+                                
+                                var table = $("<table><tr><th><span>Image</span></th><th><span>Species</span></th><th><span>Disease</span></th><th><span>Confidence</span></th></tr>");
+                                var row=$("<tr>");
+                                $.each(content, function (index, value){ row.append("<td><span>"+value+"</span></td>"); });
+                                table.append(row);
+                                table.append("</tr></table>");
+                                $("#t").html(table);
+                                $("#img").attr('src','data:image/png;base64,'+dataURL);
+                                $("#img").attr('width',width/1.5);
+                                $("#img").attr('height',height/1.5);
+                                sp.style.opacity="0%";
+                                document.getElementById('cap').innerHTML="<Button type='button' onclick='capture()'>Capture</button>";
+                                
               
+                        
+                            })
+                   
+                   
+                   
                 }, error: function(){
                    
                     ch_int=setInterval(myFunction, 200);
