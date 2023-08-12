@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
     
@@ -60,7 +61,7 @@
     <form  method='post'>
     <select id="cameraList"> </select><br><br>
     <div id="video"> </div> 
-    <div> <span id='cap'><Button type='button' onclick='capture()'>Capture</button></span> <br></div><span id='st'><button  type='button' onclick="stopCamera()">Stop</button></span> <button id="server" type="button" onclick="startserver()">Start Server</button> <span id='mode'><button type='button' onclick="sync()" disabled>Synchronous</button></span>
+    <div> <span id='cap'><Button type='button' onclick='capture()'>Capture</button></span> <br></div><span id='st'><button  type='button' onclick="stopCamera()">Stop</button></span> <button id="server" type="button" onclick="startserver()">Start Server</button><button id="status" disabled> </button>  <span id='mode'><button type='button' onclick="sync()" disabled>Synchronous</button></span>
     <canvas id="c" hidden="hidden"> </canvas><br>
    <pre><div id="container">
        <marquee scrollamount="70" id="bar" direction="right" >
@@ -145,7 +146,7 @@
             });
                 }
     
-     
+     var stat= document.getElementById('status');
      var s_url = `https://api.github.com/repos/${owner}/${repo}/contents/Plant_Disease_Detection/temp/status.txt`;
      var l  = setInterval(() => {
             fetch(s_url,{
@@ -157,12 +158,12 @@
             status = atob(status);
             if(status == 'start')
              {  
-                button.style.backgroundColor = 'green';
+                stat.style.backgroundColor = 'green';
              }
             else
             {
-                button.style.backgroundColor = 'red';
-                button.disabled='false';
+                stat.style.backgroundColor = 'red';
+              
             }
             })
             .catch((error) => console.error(error))
@@ -172,9 +173,8 @@
     function startserver()
     {  
         var button= document.getElementById('server');
-         button.disabled='true';
-         button.style.backgroundColor = 'red';
-        
+        button.disabled='true';
+    
         fetch(s_url, {
             method: 'PUT',
             headers: header,
@@ -328,8 +328,7 @@
       
         var button= document.getElementById('server');
          button.disabled='false';
-         button.style.backgroundColor = 'red';
-        var s_url = `https://api.github.com/repos/${owner}/${repo}/contents/Plant_Disease_Detection/temp/status.txt`;
+      
         fetch(s_url, {
             method: 'PUT',
             headers: header,
@@ -341,7 +340,7 @@
         .then((data) => 
         {
             console.log(data);
-            sp.innerHTML="Receiving data from the server....";
+         
         }).catch((error) => console.error(error));
     
 
@@ -420,4 +419,4 @@
 
 
 </body>
-</html>
+</html>                                                                                                                                                                                                             
