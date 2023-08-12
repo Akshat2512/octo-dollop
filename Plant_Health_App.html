@@ -147,8 +147,9 @@
                 }
      var statsha;
      var stat= document.getElementById('status');
-     var but= document.getElementById('server');
+     var statbut= document.getElementById('server');
      var s_url = `https://api.github.com/repos/${owner}/${repo}/contents/Plant_Disease_Detection/temp/status.txt`;
+     var flag = 0;
      var l  = setInterval(() => {
             fetch(s_url,{
                 method : 'get',
@@ -160,13 +161,16 @@
             statsha = data.sha;
             if(status == 'start')
              {  
-                 but.disabled=true;
+                 statbut.disabled=true;
                  stat.style.backgroundColor = 'green';
+               
              }
             else
-            {
+            {   statbut.disabled=false;
                 stat.style.backgroundColor = 'red';
-                 but.disabled=false;
+         
+                
+            
             }
             })
             .catch((error) => console.error(error))
@@ -176,7 +180,7 @@
     function startsrvr()
     {  
         
-          but.disabled=true;
+        statbut.disabled=true;
 
         fetch(`https://api.github.com/repos/${owner}/${repo}/actions/workflows/Pyscript.yml/dispatches`, {
   method: 'POST',
@@ -184,9 +188,9 @@
   body: JSON.stringify({
     ref: 'master'
   })
-})
+});
     }
-
+    }
     
     function UpdateData(i_url, content)
     {   
@@ -312,7 +316,7 @@
        
      
         function stop() {
-  
+        statbut.disabled=false; 
         fetch(s_url, {
             method: 'PUT',
             headers: header,
