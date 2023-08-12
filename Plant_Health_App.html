@@ -220,15 +220,14 @@ fetch(j_url, {
                         method: 'GET',
                         headers :  header ,
                     }). then(response => response.json())
-                        . then(data =>  
-                            
+                        . then(data =>  {     
                         fetch(j_url, {
                         cache: 'no-cache',
                         method: 'DELETE',
                         headers :  header ,
                         body: JSON.stringify({
                         message: 'Delete Record',
-                        sha: data.sha
+                        sha: data.sha }
                     })
                     }). then(response => response.json());
                         
