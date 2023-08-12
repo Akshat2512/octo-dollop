@@ -166,7 +166,7 @@
             else
             {
                 stat.style.backgroundColor = 'red';
-                statbtn.disabled = false;
+               
             }
             })
             .catch((error) => console.error(error))
@@ -313,7 +313,7 @@
      
         function stop() {
       
-    
+        statbtn.disabled = false;
       
         fetch(s_url, {
             method: 'PUT',
