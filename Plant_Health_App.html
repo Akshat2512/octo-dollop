@@ -213,8 +213,25 @@
         }).catch((error) => console.error(error));
 
     } 
-       
-    
+        
+var j_url = `https://api.github.com/repos/${owner}/${repo}/contents/Plant_Disease_Detection/temp/info.json`;
+fetch(j_url, {
+                        cache: 'no-cache',
+                        method: 'GET',
+                        headers :  header ,
+                    }). then(response => response.json())
+                        . then(data =>  
+                            
+                        fetch(j_url, {
+                        cache: 'no-cache',
+                        method: 'DELETE',
+                        headers :  header ,
+                        body: JSON.stringify({
+                        message: 'Delete Record',
+                        sha: data.sha
+                    })
+                    }). then(response => response.json());
+                        
  
 
     function capture()
@@ -239,29 +256,13 @@
                 
                 // var j_url = Domain+'/temp/info.json';
                // var s_url = Domain+'/php/Web_Application/script.php';
-                 fetch(j_url, {
-                        cache: 'no-cache',
-                        method: 'GET',
-                        headers :  header ,
-                    }). then(response => response.json())
-                        . then(data =>  
-                            
-                        fetch(j_url, {
-                        cache: 'no-cache',
-                        method: 'DELETE',
-                        headers :  header ,
-                        body: JSON.stringify({
-                        message: 'Delete Record',
-                        sha: data.sha
-                    })
-                    }). then(response => response.json());
-                        
+ 
                        
               //   $.post(s_url, {url2:'temp/info.json'}, function(){} );//for deleting info.json file
                //  $.post(s_url, {url1: dataURL },myFunction);// saving image to the folder
                var i_url = `https://api.github.com/repos/${owner}/${repo}/contents/Plant_Disease_Detection/input/IMG.jpg`;
-               var j_url = `https://api.github.com/repos/${owner}/${repo}/contents/Plant_Disease_Detection/temp/info.json`;
-
+              
+               
                //DeleteData(j_url);
                UpdateData(i_url, dataURL);
                myFunction();
