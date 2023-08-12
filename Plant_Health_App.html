@@ -61,7 +61,7 @@
     <form  method='post'>
     <select id="cameraList"> </select><br><br>
     <div id="video"> </div> 
-    <div> <span id='cap'><Button type='button' onclick='capture()'>Capture</button></span> <br></div><span id='st'><button  type='button' onclick="stopCamera()">Stop</button></span> <button id="server" type="button" onclick="startserver()">Start Server</button><button id="status" disabled> </button>  <span id='mode'><button type='button' onclick="sync()" disabled>Synchronous</button></span>
+    <div> <span id='cap'><Button type='button' onclick='capture()'>Capture</button></span> <br></div><span id='st'><button  type='button' onclick="stopCamera()">Stop</button></span> <button id="server" type="button" onclick="startsrvr()">Start Server</button><button id="status" disabled> </button>  <span id='mode'><button type='button' onclick="sync()" disabled>Synchronous</button></span>
     <canvas id="c" hidden="hidden"> </canvas><br>
    <pre><div id="container">
        <marquee scrollamount="70" id="bar" direction="right" >
@@ -145,7 +145,7 @@
             behavior: 'smooth'
             });
                 }
-    
+     var statsha;
      var stat= document.getElementById('status');
      var s_url = `https://api.github.com/repos/${owner}/${repo}/contents/Plant_Disease_Detection/temp/status.txt`;
      var l  = setInterval(() => {
@@ -156,6 +156,7 @@
             }).then(response => response.json())
             .then(data => { status = data.content;
             status = atob(status);
+            statsha = data.sha;
             if(status == 'start')
              {  
                 stat.style.backgroundColor = 'green';
@@ -170,17 +171,18 @@
         
         },5000)
 
-    function startserver()
+    function startsrvr()
     {  
-        var button= document.getElementById('server');
-        button.disabled='true';
+        var but= document.getElementById('server');
+        but.disabled=true;
     
         fetch(s_url, {
             method: 'PUT',
             headers: header,
             body: JSON.stringify({
                 message: 'status update',
-                content: btoa('start') })
+                content: btoa('start'),
+                sha: statsha })
          })
         .then((response) => response.json())
         .then((data) => 
@@ -327,7 +329,7 @@
         function stop() {
       
         var button= document.getElementById('server');
-         button.disabled='false';
+         button.disabled=false;
       
         fetch(s_url, {
             method: 'PUT',
