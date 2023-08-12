@@ -176,7 +176,7 @@
     function startsrvr()
     {  
         
-        
+          but.disabled=true;
 
         fetch(`https://api.github.com/repos/${owner}/${repo}/actions/workflows/Pyscript.yml/dispatches`, {
   method: 'POST',
