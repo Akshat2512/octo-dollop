@@ -146,34 +146,6 @@
             });
                 }
     
-
-
-    function LoadData(i_url,content)
-    {  
-        fetch(i_url+'image.txt', {
-                    cache: 'no-cache',
-                    method: 'get',
-                    headers:  header 
-                    }). then(response => response.json())
-                    .then(data => {
-                        cont = data.content; 
-                        sha2 = data.sha;
-                    fetch(i_url+'ima.png', {
-                    cache: 'no-cache',
-                    method: 'PUT',
-                    headers:  header ,
-                    body: JSON.stringify({
-                        message: 'IMG Upload',
-                        content: atob(cont),
-                      
-                    })
-                    })
-                    .then(response => response.json())
-                    .then(data => console.log(data));
-                    
-                    });
-        
-        }
     
     function UpdateData(i_url, content)
     {   
@@ -196,42 +168,7 @@
 
     } 
        
-    
-    
-    function DeleteData(j_url)
-    {
-
-        fetch(j_url,{
-            cache: 'no-cache',
-            method: 'GET',
-            headers :  header 
-            
-         }).then(response => response.json())
-          .then(data => {
-              sha = data.sha;
-              fetch(j_url, {
-            cache: 'no-cache',
-            method: 'DELETE',
-            headers :  header ,
-            body: JSON.stringify({
-            message: 'Delete Record',
-            sha: sha
-          })
-        }). then(response => response.json())
-            . then(data =>  
-                { 
-                    console.log(data);
-            
-                })
       
-          });
-       
-
-
-
-        
-    }
-          
 
     function capture()
         {      
