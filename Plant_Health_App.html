@@ -175,23 +175,6 @@
     {  
         var but= document.getElementById('server');
         but.disabled=true;
-    
-        fetch(s_url, {
-            method: 'PUT',
-            headers: header,
-            body: JSON.stringify({
-                message: 'status update',
-                content: btoa('start'),
-                sha: statsha })
-         })
-        .then((response) => response.json())
-        .then((data) => 
-        {
-            console.log(data);
-           
-        }).catch((error) => console.error(error));
-    
-
 
         fetch(`https://api.github.com/repos/${owner}/${repo}/actions/workflows/Pyscript.yml/dispatches`, {
   method: 'POST',
