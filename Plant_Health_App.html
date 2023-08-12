@@ -214,6 +214,7 @@
 
     } 
         
+      
 var j_url = `https://api.github.com/repos/${owner}/${repo}/contents/Plant_Disease_Detection/temp/info.json`;
 fetch(j_url, {
                         cache: 'no-cache',
@@ -227,12 +228,10 @@ fetch(j_url, {
                         headers :  header ,
                         body: JSON.stringify({
                         message: 'Delete Record',
-                        sha: data.sha }
-                    })
+                        sha: data.sha })
+                        })
                     }). then(response => response.json());
                         
- 
-
     function capture()
         {      
                 scrolltoBottom();
