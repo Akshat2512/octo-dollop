@@ -61,7 +61,7 @@
     <form  method='post'>
     <select id="cameraList"> </select><br><br>
     <div id="video"> </div> 
-    <div> <span id='cap'><Button type='button' onclick='capture()'>Capture</button></span> <br></div><span id='st'><button  type='button' onclick="stopCamera()">Stop</button></span> <button id="server" type="button" onclick="startsrvr()" disabled>Start Server</button><button id="status" disabled> </button>  <span id='mode'><button type='button' onclick="sync()" disabled>Synchronous</button></span>
+    <div> <span id='cap'><Button type='button' onclick='capture()'>Capture</button></span> <br></div><span id='st'><button  type='button' onclick="stopCamera()">Stop</button></span> <button id="server" type="button" onclick="startsrvr()">Start Server</button><button id="status" disabled> </button>  <span id='mode'><button type='button' onclick="sync()" disabled>Synchronous</button></span>
     <canvas id="c" hidden="hidden"> </canvas><br>
    <pre><div id="container">
        <marquee scrollamount="70" id="bar" direction="right" >
@@ -147,9 +147,8 @@
                 }
      var statsha;
      var stat= document.getElementById('status');
-     var statbut= document.getElementById('server');
+     var statbtn = document.getElementById('server');
      var s_url = `https://api.github.com/repos/${owner}/${repo}/contents/Plant_Disease_Detection/temp/status.txt`;
-     var flag = 0;
      var l  = setInterval(() => {
             fetch(s_url,{
                 method : 'get',
@@ -161,16 +160,13 @@
             statsha = data.sha;
             if(status == 'start')
              {  
-                 statbut.disabled=true;
-                 stat.style.backgroundColor = 'green';
-               
+                statbtn.disabled = true;
+                stat.style.backgroundColor = 'green';
              }
             else
-            {   statbut.disabled=false;
+            {
                 stat.style.backgroundColor = 'red';
-         
-                
-            
+                statbtn.disabled = false;
             }
             })
             .catch((error) => console.error(error))
@@ -179,8 +175,8 @@
 
     function startsrvr()
     {  
-        
-        statbut.disabled=true;
+       
+        statbtn.disabled=true;
 
         fetch(`https://api.github.com/repos/${owner}/${repo}/actions/workflows/Pyscript.yml/dispatches`, {
   method: 'POST',
@@ -188,9 +184,9 @@
   body: JSON.stringify({
     ref: 'master'
   })
-});
+})
     }
-    }
+
     
     function UpdateData(i_url, content)
     {   
@@ -316,14 +312,15 @@
        
      
         function stop() {
-        statbut.disabled=false; 
+      
+    
+      
         fetch(s_url, {
             method: 'PUT',
             headers: header,
             body: JSON.stringify({
                 message: 'status update',
-                content: btoa('stop'),
-                sha: statsha})
+                content: btoa('stop') })
          })
         .then((response) => response.json())
         .then((data) => 
