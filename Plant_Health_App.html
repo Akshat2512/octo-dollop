@@ -167,7 +167,9 @@
                 statbtn.disabled = true;
                   flag = 0;}
                          stat.style.backgroundColor = 'green';
-                      
+                         var sp=document.getElementById("span2");
+                sp.innerHTML="Server online....";
+                sp.style.opacity='100%';
              }
             else
             {  
@@ -175,7 +177,9 @@
                  {  statbtn.disabled = false; 
                    flag = 0;}
                 stat.style.backgroundColor = 'red';
-               
+                var sp=document.getElementById("span2");
+                sp.innerHTML="Server offline....";
+                 sp.style.opacity='100%';
             }
             })
             .catch((error) => console.error(error))
