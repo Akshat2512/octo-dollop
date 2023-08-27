@@ -167,17 +167,22 @@
                  {
                 statbtn.disabled = true;
                 statbtn2.disabled = false;
-                  flag = 0;}
-                         stat.style.backgroundColor = 'green';
-                         var sp=document.getElementById("span2");
+                var sp=document.getElementById("span2");
                 sp.innerHTML="Server online....";
                 sp.style.opacity='100%';
+                  flag = 0;}
+                         stat.style.backgroundColor = 'green';
+                        
              }
             else
             {  
                  if(flag == 1)
                  {  statbtn.disabled = false; 
                     statbtn2.disabled = true;
+                    stat.style.backgroundColor = 'red';
+                var sp=document.getElementById("span2");
+                sp.innerHTML="Server offline....";
+                 sp.style.opacity='100%';
                    flag = 0;}
                 stat.style.backgroundColor = 'red';
                 var sp=document.getElementById("span2");
@@ -206,6 +211,7 @@
     ref: 'master'
   })
 })
+flag = 1;
     }
  function stpsrvr()
  {    statbtn.disabled = false;
@@ -234,7 +240,7 @@
          
         }).catch((error) => console.error(error));
     })
-  
+    flag = 1;
  }
     
     function UpdateData(i_url, content)
