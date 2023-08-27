@@ -175,9 +175,7 @@
                          stat.style.backgroundColor = 'green';
                          var sp=document.getElementById("span3");
                 sp.innerHTML="Server online....";
-                var sp1=document.getElementById("span2");
-                 sp1.style.opacity='0%';
-                 document.getElementById("bar").style.opacity='0%';
+                
                         
              }
             else
@@ -202,10 +200,9 @@
     {  
         statbtn2.disabled = true;
         statbtn.disabled=true;
-        var sp=document.getElementById("span2");
+        var sp=document.getElementById("span3");
                 sp.innerHTML="Starting server....";
-                 sp.style.opacity='100%';
-                document.getElementById("bar").style.opacity='100%';
+                
 
         fetch(`https://api.github.com/repos/${owner}/${repo}/actions/workflows/Pyscript.yml/dispatches`, {
   method: 'POST',
