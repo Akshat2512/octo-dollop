@@ -61,7 +61,7 @@
     <form  method='post'>
     <select id="cameraList"> </select><br><br>
     <div id="video"> </div> 
-    <div> <span id='cap'><Button type='button' onclick='capture()'>Capture</button></span> <br></div><span id='st'><button  type='button' onclick="stopCamera()">Stop</button></span> <button id="server" type="button" onclick="startsrvr()" disabled>Start Server</button><button id='stpserver' type="button" onclick="stpsrvr()" disabled>Stop Server</button><button id="status" disabled> </button>  <span id='mode'><button type='button' onclick="sync()" disabled>Synchronous</button></span>
+    <div> <span id='cap'><Button type='button' onclick='capture()'>Capture</button></span>&nbsp&nbsp&nbsp<span id='span3'></span> <br></div><span id='st'><button  type='button' onclick="stopCamera()">Stop</button></span> <button id="server" type="button" onclick="startsrvr()" disabled>Start Server</button><button id='stpserver' type="button" onclick="stpsrvr()" disabled>Stop Server</button><button id="status" disabled> </button>  <span id='mode'><button type='button' onclick="sync()" disabled>Synchronous</button></span>
     <canvas id="c" hidden="hidden"> </canvas><br>
    <pre><div id="container">
        <marquee scrollamount="70" id="bar" direction="right" >
@@ -167,9 +167,11 @@
                  {
                 statbtn.disabled = true;
                 statbtn2.disabled = false;
-                var sp=document.getElementById("span2");
+                var sp=document.getElementById("span3");
                 sp.innerHTML="Server online....";
-                sp.style.opacity='100%';
+                var sp1=document.getElementById("span2");
+                 sp1.style.opacity='0%';
+                 document.getElementById("bar").style.opacity='0%';
                   flag = 0;}
                          stat.style.backgroundColor = 'green';
                         
@@ -180,14 +182,11 @@
                  {  statbtn.disabled = false; 
                     statbtn2.disabled = true;
                     stat.style.backgroundColor = 'red';
-                var sp=document.getElementById("span2");
+                var sp=document.getElementById("span3");
                 sp.innerHTML="Server offline....";
-                 sp.style.opacity='100%';
                    flag = 0;}
                 stat.style.backgroundColor = 'red';
-                var sp=document.getElementById("span2");
-                sp.innerHTML="Server offline....";
-                 sp.style.opacity='100%';
+               
             }
             })
             .catch((error) => console.error(error))
