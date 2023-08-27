@@ -175,7 +175,7 @@
                 var sp1=document.getElementById("span2");
                  sp1.style.opacity='0%';
                  document.getElementById("bar").style.opacity='0%';
-                  flag = 0;}
+               }
                          stat.style.backgroundColor = 'green';
                         
              }
@@ -187,7 +187,7 @@
                     stat.style.backgroundColor = 'red';
                 var sp=document.getElementById("span3");
                 sp.innerHTML="Server offline....";
-                   flag = 0;}
+               }
                 stat.style.backgroundColor = 'red';
                
             }
@@ -213,7 +213,8 @@
     ref: 'master'
   })
 })
-flag = 1;
+flag=0;
+
     }
  function stpsrvr()
  {    statbtn.disabled = false;
