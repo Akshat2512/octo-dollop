@@ -170,26 +170,26 @@
                  {
                 statbtn.disabled = true;
                 statbtn2.disabled = false;
-                var sp=document.getElementById("span3");
+              
+               }
+                         stat.style.backgroundColor = 'green';
+                         var sp=document.getElementById("span3");
                 sp.innerHTML="Server online....";
                 var sp1=document.getElementById("span2");
                  sp1.style.opacity='0%';
                  document.getElementById("bar").style.opacity='0%';
-               }
-                         stat.style.backgroundColor = 'green';
                         
              }
             else
             {  
-                 if(flag == 1)
-                 {  statbtn.disabled = false; 
+                   statbtn.disabled = false; 
                     statbtn2.disabled = true;
-                    stat.style.backgroundColor = 'red';
+             
+             
+                stat.style.backgroundColor = 'red';
+                  
                 var sp=document.getElementById("span3");
                 sp.innerHTML="Server offline....";
-               }
-                stat.style.backgroundColor = 'red';
-               
             }
             })
             .catch((error) => console.error(error))
@@ -199,7 +199,7 @@
     
     function startsrvr()
     {  
-        statbtn2.disabled = false;
+        statbtn2.disabled = true;
         statbtn.disabled=true;
         var sp=document.getElementById("span2");
                 sp.innerHTML="Starting server....";
@@ -217,7 +217,7 @@ flag=0;
 
     }
  function stpsrvr()
- {    statbtn.disabled = false;
+ {    statbtn.disabled = true;
     statbtn2.disabled = true;
     fetch(s_url,{
                 method : 'get',
