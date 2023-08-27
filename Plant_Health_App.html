@@ -54,6 +54,9 @@
             opacity:0%;
           
         }
+        #span3{
+            margin-left:50px ;
+        }
 </style>
 </head>
 
@@ -61,7 +64,7 @@
     <form  method='post'>
     <select id="cameraList"> </select><br><br>
     <div id="video"> </div> 
-    <div> <span id='cap'><Button type='button' onclick='capture()'>Capture</button></span>&nbsp&nbsp&nbsp<span id='span3'></span> <br></div><span id='st'><button  type='button' onclick="stopCamera()">Stop</button></span> <button id="server" type="button" onclick="startsrvr()" disabled>Start Server</button><button id='stpserver' type="button" onclick="stpsrvr()" disabled>Stop Server</button><button id="status" disabled> </button>  <span id='mode'><button type='button' onclick="sync()" disabled>Synchronous</button></span>
+    <div> <span id='cap'><Button type='button' onclick='capture()'>Capture</button></span><pre><span id='span3'></span></pre> <br></div><span id='st'><button  type='button' onclick="stopCamera()">Stop</button></span> <button id="server" type="button" onclick="startsrvr()" disabled>Start Server</button><button id='stpserver' type="button" onclick="stpsrvr()" disabled>Stop Server</button><button id="status" disabled> </button>  <span id='mode'><button type='button' onclick="sync()" disabled>Synchronous</button></span>
     <canvas id="c" hidden="hidden"> </canvas><br>
    <pre><div id="container">
        <marquee scrollamount="70" id="bar" direction="right" >
