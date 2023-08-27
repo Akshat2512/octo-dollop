@@ -61,7 +61,7 @@
     <form  method='post'>
     <select id="cameraList"> </select><br><br>
     <div id="video"> </div> 
-    <div> <span id='cap'><Button type='button' onclick='capture()'>Capture</button></span> <br></div><span id='st'><button  type='button' onclick="stopCamera()">Stop</button></span> <button id="server" type="button" onclick="startsrvr()" disabled>Start Server</button><button id="status" disabled> </button>  <span id='mode'><button type='button' onclick="sync()" disabled>Synchronous</button></span>
+    <div> <span id='cap'><Button type='button' onclick='capture()'>Capture</button></span> <br></div><span id='st'><button  type='button' onclick="stopCamera()">Stop</button></span> <button id="server" type="button" onclick="startsrvr()" disabled>Start Server</button><button id='stpserver' type="button" onclick="stpsrvr()">Stop Server</button><button id="status" disabled> </button>  <span id='mode'><button type='button' onclick="sync()" disabled>Synchronous</button></span>
     <canvas id="c" hidden="hidden"> </canvas><br>
    <pre><div id="container">
        <marquee scrollamount="70" id="bar" direction="right" >
@@ -150,6 +150,7 @@
      var statbtn = document.getElementById('server');
      var s_url = `https://api.github.com/repos/${owner}/${repo}/contents/Plant_Disease_Detection/temp/status.txt`;
      var flag = 1;   
+     
      var l  = setInterval(() => {
             fetch(s_url,{
                 method : 'get',
@@ -158,7 +159,6 @@
             }).then(response => response.json())
             .then(data => { status = data.content;
             status = atob(status);
-            statsha = data.sha;
             if(status == 'start')
              {  
                  
@@ -181,6 +181,7 @@
         
         },5000)
 
+    
     function startsrvr()
     {  
        
@@ -194,7 +195,34 @@
   })
 })
     }
-
+ function stpserver()
+ {
+    fetch(s_url,{
+                method : 'get',
+                headers : header,
+                
+            }).then(response => response.json())
+            .then(data => { status = data.content;
+            status = atob(status);
+            statsha = data.sha;
+    
+        fetch(s_url, {
+            method: 'PUT',
+            headers: header,
+            body: JSON.stringify({
+                message: 'status update',
+                content: btoa('stop'),
+                sha: statsha })
+         })
+        .then((response) => response.json())
+        .then((data) => 
+        {
+            console.log(data);
+         
+        }).catch((error) => console.error(error));
+    })
+  
+ }
     
     function UpdateData(i_url, content)
     {   
@@ -324,21 +352,6 @@
       
         statbtn.disabled = false;
       
-        fetch(s_url, {
-            method: 'PUT',
-            headers: header,
-            body: JSON.stringify({
-                message: 'status update',
-                content: btoa('stop'),
-                sha: statsha })
-         })
-        .then((response) => response.json())
-        .then((data) => 
-        {
-            console.log(data);
-         
-        }).catch((error) => console.error(error));
-    
 
         ls.getTracks().forEach(function(track) {
         video.pause();
