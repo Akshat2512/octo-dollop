@@ -61,7 +61,7 @@
     <form  method='post'>
     <select id="cameraList"> </select><br><br>
     <div id="video"> </div> 
-    <div> <span id='cap'><Button type='button' onclick='capture()'>Capture</button></span> <br></div><span id='st'><button  type='button' onclick="stopCamera()">Stop</button></span> <button id="server" type="button" onclick="startsrvr()" disabled>Start Server</button><button id='stpserver' type="button" onclick="stpsrvr()">Stop Server</button><button id="status" disabled> </button>  <span id='mode'><button type='button' onclick="sync()" disabled>Synchronous</button></span>
+    <div> <span id='cap'><Button type='button' onclick='capture()'>Capture</button></span> <br></div><span id='st'><button  type='button' onclick="stopCamera()">Stop</button></span> <button id="server" type="button" onclick="startsrvr()" disabled>Start Server</button><button id='stpserver' type="button" onclick="stpsrvr()" disabled>Stop Server</button><button id="status" disabled> </button>  <span id='mode'><button type='button' onclick="sync()" disabled>Synchronous</button></span>
     <canvas id="c" hidden="hidden"> </canvas><br>
    <pre><div id="container">
        <marquee scrollamount="70" id="bar" direction="right" >
@@ -148,6 +148,7 @@
      var statsha;
      var stat= document.getElementById('status');
      var statbtn = document.getElementById('server');
+     var statbtn2 = document.getElementById('stpserver');
      var s_url = `https://api.github.com/repos/${owner}/${repo}/contents/Plant_Disease_Detection/temp/status.txt`;
      var flag = 1;   
      
@@ -165,6 +166,7 @@
                   if(flag == 1)
                  {
                 statbtn.disabled = true;
+                statbtn2.disabled = false;
                   flag = 0;}
                          stat.style.backgroundColor = 'green';
                          var sp=document.getElementById("span2");
@@ -175,6 +177,7 @@
             {  
                  if(flag == 1)
                  {  statbtn.disabled = false; 
+                    statbtn2.disabled = true;
                    flag = 0;}
                 stat.style.backgroundColor = 'red';
                 var sp=document.getElementById("span2");
