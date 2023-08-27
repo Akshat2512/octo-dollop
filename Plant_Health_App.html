@@ -167,6 +167,7 @@
                 statbtn.disabled = true;
                   flag = 0;}
                          stat.style.backgroundColor = 'green';
+                      
              }
             else
             {  
@@ -184,8 +185,12 @@
     
     function startsrvr()
     {  
-       
+        
         statbtn.disabled=true;
+        var sp=document.getElementById("span2");
+                sp.innerHTML="Starting server....";
+                 sp.style.opacity='100%';
+                document.getElementById("bar").style.opacity='100%';
 
         fetch(`https://api.github.com/repos/${owner}/${repo}/actions/workflows/Pyscript.yml/dispatches`, {
   method: 'POST',
@@ -195,7 +200,7 @@
   })
 })
     }
- function stpsrver()
+ function stpsrvr()
  {    statbtn.disabled = false;
     fetch(s_url,{
                 method : 'get',
