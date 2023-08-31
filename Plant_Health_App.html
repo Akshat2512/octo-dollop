@@ -155,7 +155,7 @@
      var s_url = `https://api.github.com/repos/${owner}/${repo}/contents/Plant_Disease_Detection/temp/status.txt`;
      var flag = 1;   
      
-     var l  = setInterval(() => {
+
             fetch(s_url,{
                 method : 'get',
                 headers : header,
@@ -166,12 +166,10 @@
             if(status == 'start')
              {  
                  
-                  if(flag == 1)
-                 {
                 statbtn.disabled = true;
                 statbtn2.disabled = false;
               
-               }
+            
                          stat.style.backgroundColor = 'green';
                          var sp=document.getElementById("span3");
                 sp.innerHTML="Server online....";
@@ -180,11 +178,10 @@
              }
             else
             {  
-                if(flag=1){
+               
                     statbtn.disabled=false;
                     statbtn2.disabled = true;
-                }
-             
+            
                 stat.style.backgroundColor = 'red';
                   
                 var sp=document.getElementById("span3");
@@ -193,7 +190,7 @@
             })
             .catch((error) => console.error(error))
         
-        },5000)
+ 
 
     
     function startsrvr()
@@ -201,22 +198,59 @@
         statbtn2.disabled = true;
         statbtn.disabled=true;
         var sp=document.getElementById("span3");
-                sp.innerHTML="Starting server....";
-                
-
+        sp.innerHTML="Starting server....";
         fetch(`https://api.github.com/repos/${owner}/${repo}/actions/workflows/Pyscript.yml/dispatches`, {
   method: 'POST',
   headers: header,
   body: JSON.stringify({
     ref: 'master'
-  })
+  }) 
 })
-flag=0;
+
+  var l  = setInterval(() => {
+            fetch(s_url,{
+                method : 'get',
+                headers : header,
+                
+            }).then(response => response.json())
+            .then(data => { status = data.content;
+            status = atob(status);
+            if(flag==0)
+              { var sp=document.getElementById("span3");
+                sp.innerHTML="Starting server....";
+                flag=1;
+               }
+               else if(flag==1)
+               {
+                var sp=document.getElementById("span3");
+                sp.innerHTML="Wait for 3-4 minutes....";
+                flag=0;
+               }
+            if(status == 'start')
+             {  
+                         statbtn2.disabled = false;
+                         stat.style.backgroundColor = 'green';
+                         var sp=document.getElementById("span3");
+                sp.innerHTML="Server online....";
+                flag=2;
+                clearInterval(l);
+                        
+             }
+            })
+            .catch((error) => console.error(error))
+        
+        },5000)
+
+
 
     }
  function stpsrvr()
  {    statbtn.disabled = false;
     statbtn2.disabled = true;
+    stat.style.backgroundColor = 'red';
+                  
+                  var sp=document.getElementById("span3");
+                  sp.innerHTML="Server offline....";
     fetch(s_url,{
                 method : 'get',
                 headers : header,
@@ -241,7 +275,6 @@ flag=0;
          
         }).catch((error) => console.error(error));
     })
-    flag = 1;
  }
     
     function UpdateData(i_url, content)
