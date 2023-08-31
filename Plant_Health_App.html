@@ -239,7 +239,11 @@
                             timeout =timeout-1;
                             if(timeout == 0)
                             {
-                                stpsrvr();
+                                clearInterval(tot);  
+                                statbtn.disabled = false;
+                                statbtn2.disabled = true;
+                                stat.style.backgroundColor = 'red';
+                                sp.innerHTML="Server offline....";
                             }
                          },1000)
                 
