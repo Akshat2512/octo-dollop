@@ -192,7 +192,7 @@
         
  
 
-    
+    var tot;
     function startsrvr()
     {  
         statbtn2.disabled = true;
@@ -231,7 +231,16 @@
                          statbtn2.disabled = false;
                          stat.style.backgroundColor = 'green';
                          var sp=document.getElementById("span3");
-                sp.innerHTML="Server online....";
+                         var timeout = 600;
+                          tot = setInterval(()=>{
+                            sp.innerHTML=`Server online for ${timeout} seconds ....)`;
+                            timeout =timeout-1;
+                            if(timeout == 0)
+                            {
+                                clearInterval(tot);
+                            }
+                         },1000)
+                
                 flag=2;
                 clearInterval(l);
                         
@@ -245,12 +254,13 @@
 
     }
  function stpsrvr()
- {    statbtn.disabled = false;
+ {  clearInterval(tot);  
+    statbtn.disabled = false;
     statbtn2.disabled = true;
     stat.style.backgroundColor = 'red';
-                  
-                  var sp=document.getElementById("span3");
-                  sp.innerHTML="Server offline....";
+    
+    var sp=document.getElementById("span3");
+    sp.innerHTML="Server offline....";
     fetch(s_url,{
                 method : 'get',
                 headers : header,
