@@ -233,11 +233,12 @@
                          var sp=document.getElementById("span3");
                          var timeout = 600;
                           tot = setInterval(()=>{
-                            sp.innerHTML=`Server online for ${timeout} seconds ....)`;
+                            sp.innerHTML=`Server online for ${timeout} sec ....`;
                             timeout =timeout-1;
                             if(timeout == 0)
                             {
                                 clearInterval(tot);
+                                stpservr();
                             }
                          },1000)
                 
