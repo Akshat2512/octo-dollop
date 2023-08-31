@@ -237,8 +237,7 @@
                             timeout =timeout-1;
                             if(timeout == 0)
                             {
-                                clearInterval(tot);
-                                stpsrvr();
+                                clearInterval(tot);  
                             }
                          },1000)
                 
@@ -414,9 +413,6 @@
      
         function stop() {
       
-    
-      
-
         ls.getTracks().forEach(function(track) {
         video.pause();
         track.stop();
@@ -444,7 +440,7 @@
             function start()
             {
                 capture();
-                console.log('Hello');
+          
             }
 
           int=setInterval(start,500);
